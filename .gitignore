@@ -1,0 +1,29 @@
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+logs/
+log/
+
+# Temp / backups
+tmp/
+temp/
+bak/
+backup/
+_backups/
+*.bak
+
+# Windows shortcuts
+*.url
+
+# Node (на будущее)
+node_modules/
+dist/
+build/
