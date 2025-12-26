@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Мифический бестиарий — новая версия A</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Основные стили бестиария -->
+  <link rel="stylesheet" href="css/style.css" />
+
+  <!-- Стили бокового навигационного меню -->
+  <link rel="stylesheet" href="css/nav.css" />
+
+  <!-- Внутренние стили для переключателя режимов -->
+  <style>
+    .header-modes {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .mode-toggle {
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      text-decoration: none;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      color: #e5e7eb;
+      background: rgba(15, 23, 42, 0.9);
+      cursor: pointer;
+      transition:
+        background 0.18s ease-out,
+        color 0.18s ease-out,
+        border-color 0.18s ease-out,
+        box-shadow 0.18s ease-out;
+    }
+
+    .mode-toggle:hover {
+      border-color: #f97316;
+      background: radial-gradient(circle at top, #f97316, #ea580c);
+      color: #111827;
+      box-shadow: 0 0 16px rgba(248, 250, 252, 0.4);
+    }
+
+    .mode-toggle--active {
+      border-color: #fbbf24;
+      background: radial-gradient(circle at top, #f97316, #f59e0b);
+      color: #111827;
+      box-shadow: 0 0 18px rgba(251, 191, 36, 0.7);
+    }
+  </style>
+
+  <!-- Основная логика сайта -->
+  <script src="js/shared/utils.js" defer></script>\n  <script type="module" src="js/main.js" defer></script>
+
+  <!-- Логика бокового навигационного меню -->
+  <script src="js/nav.js" defer></script>
+</head>
+
+<body>
+
+  <!-- ======== LOADER / ERROR UI Added Automatically ======== -->
+  <div id="loader" style="display:none; padding:20px; text-align:center;">
+    <div class="spinner" style="
+      width:40px; height:40px; margin:auto;
+      border:4px solid #ccc; border-top-color:#444;
+      border-radius:50%; animation: spin 0.8s linear infinite;">
+    </div>
+    <p>Загрузка данных...</p>
+  </div>
+
+  <div id="loadError" style="display:none; padding:20px; text-align:center;">
+    <p style="color:#c33; font-weight:bold;">Ошибка загрузки данных.</p>
+    <button id="retryBtn" style="
+      padding:8px 16px; border:1px solid #333; cursor:pointer;">
+      Повторить
+    </button>
+  </div>
+
+  <style>
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+  </style>
+  <!-- ======================================================== -->
+
+<aside class="side-nav">
+  <div class="side-nav__header">
+    <div class="side-nav__logo-orb"></div>
+    <div class="side-nav__title-block">
+      <div class="side-nav__title">Codex Navigatio</div>
+      <div class="side-nav__subtitle">Навигация по Кодексу</div>
+    </div>
+  </div>
+
+  <nav class="side-nav__menu" aria-label="Навигация бестиария">
+    <!-- 1. Существа -->
+    <section class="side-nav__group" data-section="creatures">
+      <button class="side-nav__group-toggle" type="button">
+        <span class="side-nav__group-title">Существа</span>
+        <span class="side-nav__group-chevron">▾</span>
+      </button>
+      <ul class="side-nav__sublist" data-sublist>
+        <li><button class="side-nav__link" data-section="creatures" data-subsection="beasts">Звери</button></li>
+        <li><button class="side-nav__link" data-section="creatures" data-subsection="monsters">Чудовища</button></li>
+        <li><button class="side-nav__link" data-section="creatures" data-subsection="elementals">Элементали</button></li>
+        <li><button class="side-nav__link" data-section="creatures" data-subsection="undead">Нежить</button></li>
+        <li><button class="side-nav__link" data-section="creatures" data-subsection="demons">Демоны</button></li>
+        <li><button class="side-nav__link" data-section="creatures" data-subsection="angels">Ангелы</button></li>
+        <li><button class="side-nav__link" data-section="creatures" data-subsection="titans">Титаны</button></li>
+        <li><button class="side-nav__link" data-section="creatures" data-subsection="giants">Гиганты</button></li>
+        <li><button class="side-nav__link" data-section="creatures" data-subsection="aberrations">Аберрации</button></li>
+        <li><button class="side-nav__link" data-section="creatures" data-subsection="constructs">Конструкты</button></li>
+        <li><button class="side-nav__link" data-section="creatures" data-subsection="fey">Фейри</button></li>
+        <li><button class="side-nav__link" data-section="creatures" data-subsection="parasites">Паразиты и рои</button></li>
+        <li><button class="side-nav__link" data-section="creatures" data-subsection="spirits">Духи</button></li>
+        <li><button class="side-nav__link" data-section="creatures" data-subsection="planar">Планарные существа</button></li>
+        <li><button class="side-nav__link" data-section="creatures" data-subsection="cosmic">Космические существа</button></li>
+      </ul>
+    </section>
+
+    <!-- 2. Боги и пантеоны -->
+    <section class="side-nav__group" data-section="gods">
+      <button class="side-nav__group-toggle" type="button">
+        <span class="side-nav__group-title">Боги и пантеоны</span>
+        <span class="side-nav__group-chevron">▾</span>
+      </button>
+      <ul class="side-nav__sublist" data-sublist>
+        <li><button class="side-nav__link" data-section="gods" data-subsection="high">Высшие боги</button></li>
+        <li><button class="side-nav__link" data-section="gods" data-subsection="lesser">Младшие боги</button></li>
+        <li><button class="side-nav__link" data-section="gods" data-subsection="ancient">Древние божества</button></li>
+        <li><button class="side-nav__link" data-section="gods" data-subsection="proto">Протобожества</button></li>
+        <li><button class="side-nav__link" data-section="gods" data-subsection="avatars">Аватары</button></li>
+        <li><button class="side-nav__link" data-section="gods" data-subsection="domains">Домены (сферы влияния)</button></li>
+        <li><button class="side-nav__link" data-section="gods" data-subsection="fallen">Падшие / забытые божества</button></li>
+      </ul>
+    </section>
+
+    <!-- 3. Артефакты -->
+    <section class="side-nav__group" data-section="artifacts">
+      <button class="side-nav__group-toggle" type="button">
+        <span class="side-nav__group-title">Артефакты</span>
+        <span class="side-nav__group-chevron">▾</span>
+      </button>
+      <ul class="side-nav__sublist" data-sublist>
+        <li><button class="side-nav__link" data-section="artifacts" data-subsection="weapons">Оружие</button></li>
+        <li><button class="side-nav__link" data-section="artifacts" data-subsection="armors">Доспехи</button></li>
+        <li><button class="side-nav__link" data-section="artifacts" data-subsection="amulets">Амулеты и украшения</button></li>
+        <li><button class="side-nav__link" data-section="artifacts" data-subsection="cursed">Проклятые предметы</button></li>
+        <li><button class="side-nav__link" data-section="artifacts" data-subsection="living">Живые артефакты</button></li>
+        <li><button class="side-nav__link" data-section="artifacts" data-subsection="alchemy">Алхимические артефакты</button></li>
+        <li><button class="side-nav__link" data-section="artifacts" data-subsection="runes">Знаки и руны</button></li>
+        <li><button class="side-nav__link" data-section="artifacts" data-subsection="relics">Реликты эпох</button></li>
+      </ul>
+    </section>
+
+    <!-- 4. Расы и народы -->
+    <section class="side-nav__group" data-section="races">
+      <button class="side-nav__group-toggle" type="button">
+        <span class="side-nav__group-title">Расы и народы</span>
+        <span class="side-nav__group-chevron">▾</span>
+      </button>
+      <ul class="side-nav__sublist" data-sublist>
+        <li><button class="side-nav__link" data-section="races" data-subsection="main">Основные расы</button></li>
+        <li><button class="side-nav__link" data-section="races" data-subsection="sub">Подрасы</button></li>
+        <li><button class="side-nav__link" data-section="races" data-subsection="dynasties">Династии и роды</button></li>
+        <li><button class="side-nav__link" data-section="races" data-subsection="artificial">Искусственно созданные расы</button></li>
+      </ul>
+    </section>
+
+    <!-- 5. Локации и регионы -->
+    <section class="side-nav__group" data-section="locations">
+      <button class="side-nav__group-toggle" type="button">
+        <span class="side-nav__group-title">Локации и регионы</span>
+        <span class="side-nav__group-chevron">▾</span>
+      </button>
+      <ul class="side-nav__sublist" data-sublist>
+        <li><button class="side-nav__link" data-section="locations" data-subsection="planes">Миры и плоскости</button></li>
+        <li><button class="side-nav__link" data-section="locations" data-subsection="continents">Континенты</button></li>
+        <li><button class="side-nav__link" data-section="locations" data-subsection="states">Государства и регионы</button></li>
+        <li><button class="side-nav__link" data-section="locations" data-subsection="cities">Города и поселения</button></li>
+        <li><button class="side-nav__link" data-section="locations" data-subsection="ruins">Руины и забытые места</button></li>
+        <li><button class="side-nav__link" data-section="locations" data-subsection="biomes">Биомы</button></li>
+        <li><button class="side-nav__link" data-section="locations" data-subsection="anomalies">Аномалии</button></li>
+      </ul>
+    </section>
+
+    <!-- 6. Магия и явления -->
+    <section class="side-nav__group" data-section="magic">
+      <button class="side-nav__group-toggle" type="button">
+        <span class="side-nav__group-title">Магия и явления</span>
+        <span class="side-nav__group-chevron">▾</span>
+      </button>
+      <ul class="side-nav__sublist" data-sublist>
+        <li><button class="side-nav__link" data-section="magic" data-subsection="schools">Школы магии</button></li>
+        <li><button class="side-nav__link" data-section="magic" data-subsection="sources">Источники магии</button></li>
+        <li><button class="side-nav__link" data-section="magic" data-subsection="energies">Типы энергии</button></li>
+        <li><button class="side-nav__link" data-section="magic" data-subsection="phenomena">Магические явления</button></li>
+        <li><button class="side-nav__link" data-section="magic" data-subsection="rituals">Ритуалы</button></li>
+        <li><button class="side-nav__link" data-section="magic" data-subsection="mutations">Магические патологии и мутации</button></li>
+      </ul>
+    </section>
+
+    <!-- 7. История и мифы -->
+    <section class="side-nav__group" data-section="history">
+      <button class="side-nav__group-toggle" type="button">
+        <span class="side-nav__group-title">История и мифы</span>
+        <span class="side-nav__group-chevron">▾</span>
+      </button>
+      <ul class="side-nav__sublist" data-sublist>
+        <li><button class="side-nav__link" data-section="history" data-subsection="eras">Эпохи</button></li>
+        <li><button class="side-nav__link" data-section="history" data-subsection="wars">Великие войны</button></li>
+        <li><button class="side-nav__link" data-section="history" data-subsection="legends">Легенды и предания</button></li>
+        <li><button class="side-nav__link" data-section="history" data-subsection="cosmogony">Космогония</button></li>
+        <li><button class="side-nav__link" data-section="history" data-subsection="heroes">Герои и антигерои</button></li>
+        <li><button class="side-nav__link" data-section="history" data-subsection="events">Глобальные события</button></li>
+      </ul>
+    </section>
+
+    <!-- 8. Организации -->
+    <section class="side-nav__group" data-section="orgs">
+      <button class="side-nav__group-toggle" type="button">
+        <span class="side-nav__group-title">Организации</span>
+        <span class="side-nav__group-chevron">▾</span>
+      </button>
+      <ul class="side-nav__sublist" data-sublist>
+        <li><button class="side-nav__link" data-section="orgs" data-subsection="cults">Культы</button></li>
+        <li><button class="side-nav__link" data-section="orgs" data-subsection="orders">Ордены</button></li>
+        <li><button class="side-nav__link" data-section="orgs" data-subsection="empires">Империи и союзы</button></li>
+        <li><button class="side-nav__link" data-section="orgs" data-subsection="guilds">Гильдии</button></li>
+        <li><button class="side-nav__link" data-section="orgs" data-subsection="secret">Тайные общества</button></li>
+        <li><button class="side-nav__link" data-section="orgs" data-subsection="academies">Магические академии</button></li>
+      </ul>
+    </section>
+
+    <!-- 9. Материалы и компоненты -->
+    <section class="side-nav__group" data-section="materials">
+      <button class="side-nav__group-toggle" type="button">
+        <span class="side-nav__group-title">Материалы и компоненты</span>
+        <span class="side-nav__group-chevron">▾</span>
+      </button>
+      <ul class="side-nav__sublist" data-sublist>
+        <li><button class="side-nav__link" data-section="materials" data-subsection="essences">Эссенции</button></li>
+        <li><button class="side-nav__link" data-section="materials" data-subsection="metals">Металлы и сплавы</button></li>
+        <li><button class="side-nav__link" data-section="materials" data-subsection="minerals">Минералы и кристаллы</button></li>
+        <li><button class="side-nav__link" data-section="materials" data-subsection="parts">Части существ</button></li>
+        <li><button class="side-nav__link" data-section="materials" data-subsection="alchemy">Алхимические ингредиенты</button></li>
+        <li><button class="side-nav__link" data-section="materials" data-subsection="rarities">Редкости</button></li>
+      </ul>
+    </section>
+
+    <!-- 10. Языки -->
+    <section class="side-nav__group" data-section="languages">
+      <button class="side-nav__group-toggle" type="button">
+        <span class="side-nav__group-title">Языки</span>
+        <span class="side-nav__group-chevron">▾</span>
+      </button>
+      <ul class="side-nav__sublist" data-sublist>
+        <li><button class="side-nav__link" data-section="languages" data-subsection="ancient">Древние языки</button></li>
+        <li><button class="side-nav__link" data-section="languages" data-subsection="racial">Расовые языки</button></li>
+        <li><button class="side-nav__link" data-section="languages" data-subsection="magic">Магические языки</button></li>
+        <li><button class="side-nav__link" data-section="languages" data-subsection="divine">Божественные языки</button></li>
+        <li><button class="side-nav__link" data-section="languages" data-subsection="demonic">Демонические языки</button></li>
+      </ul>
+    </section>
+
+    <!-- 11. Шаблоны и генераторы -->
+    <section class="side-nav__group" data-section="generators">
+      <button class="side-nav__group-toggle" type="button">
+        <span class="side-nav__group-title">Шаблоны и генераторы</span>
+        <span class="side-nav__group-chevron">▾</span>
+      </button>
+      <ul class="side-nav__sublist" data-sublist>
+        <li><button class="side-nav__link" data-section="generators" data-subsection="creatures">Генератор существ</button></li>
+        <li><button class="side-nav__link" data-section="generators" data-subsection="artifacts">Генератор артефактов</button></li>
+        <li><button class="side-nav__link" data-section="generators" data-subsection="gods">Генератор богов</button></li>
+        <li><button class="side-nav__link" data-section="generators" data-subsection="locations">Генератор локаций</button></li>
+        <li><button class="side-nav__link" data-section="generators" data-subsection="races">Генератор рас</button></li>
+        <li><button class="side-nav__link" data-section="generators" data-subsection="names">Генератор имен</button></li>
+        <li><button class="side-nav__link" data-section="generators" data-subsection="events">Генератор событий</button></li>
+      </ul>
+    </section>
+  </nav>
+
+  <div class="side-nav__footer">
+    <span class="side-nav__footer-label">Режим:</span>
+    <span class="side-nav__footer-value">Просмотр лора</span>
+  </div>
+</aside>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="logo-block">
+        <div class="logo-orb"></div>
+        <div>
+          <h1 class="site-title">Nexus Mundorum: Codex Primordialis</h1>
+          <p class="site-subtitle">Encyclopaedia Creaturarum et Originum</p>
+        </div>
+      </div>
+
+      <div class="header-modes">
+        <a href="index.html" class="mode-toggle mode-toggle--active">Просмотр лора</a>
+        <a href="admin.html" class="mode-toggle">Админ-панель</a>
+      </div>
+
+      <div class="header-meta">
+        <span class="pill pill-soft">Версия: <strong>Browser A</strong></span>
+        <span class="pill pill-soft" id="creaturesCounter">Загрузка...</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="container">
+
+
+      <section id="startScreen" class="start-screen">
+        <div class="start-screen__inner">
+          <div class="start-screen__badge">
+            NEXUS MUNDORUM · CODEX PRIMORDIALIS
+          </div>
+
+          <h1 class="start-screen__title">
+            Нексус Мундорум: Кодекс Примордиалис
+          </h1>
+
+          <p class="start-screen__subtitle">
+            <span class="start-screen__subtitle-line">Encyclopaedia Creaturarum et Originum</span>
+            <span class="start-screen__subtitle-line">Энциклопедия Существ и Истоков</span>
+          </p>
+
+          <div class="start-screen__text">
+            <p>
+              Нексус Мундорум — центральный узел многореальности, точка пересечения миров и эпох.
+              Здесь формируется единая энциклопедия, объединяющая как известные каждому архетипы —
+              зверей, чудищ, духов, классические артефакты и расы, — так и полностью авторские сущности,
+              созданные специально для этой вселенной или для будущих историй.
+            </p>
+            <p>
+              Codex Primordialis — древнейшая книга-энциклопедия, хранящая источники магии,
+              истории миров, природу живых форм и первопричины, из которых рождаются новые реальности.
+              Этот портал задуман как живая, постоянно расширяемая база, на которую может опереться любой творец.
+            </p>
+            <p>
+              Здесь можно создавать собственные миры или развивать уже существующие в рамках Нексуса.
+              Писать рассказы, продолжать сюжетные линии, формировать лор, вводить новые расы,
+              расширять карту реальностей — все это часть единого процесса.
+            </p>
+          </div>
+
+          <div class="start-screen__actions">
+            <div class="start-screen__hint">
+              Выберите, с чего начать путешествие по Кодексу:
+            </div>
+            <div class="start-screen__buttons">
+              <button type="button"
+                      class="start-screen__btn"
+                      data-section="creatures"
+                      data-subsection="beasts">
+                Существа
+              </button>
+              <button type="button"
+                      class="start-screen__btn"
+                      data-section="artifacts"
+                      data-subsection="weapons">
+                Артефакты
+              </button>
+              <button type="button"
+                      class="start-screen__btn"
+                      data-section="gods"
+                      data-subsection="high">
+                Боги и пантеоны
+              </button>
+              <button type="button"
+                      class="start-screen__btn"
+                      data-section="locations"
+                      data-subsection="planes">
+                Локации и миры
+              </button>
+              <button type="button"
+                      class="start-screen__btn"
+                      data-section="history"
+                      data-subsection="eras">
+                История и мифы
+              </button>
+              <button type="button"
+                      class="start-screen__btn"
+                      data-section="magic"
+                      data-subsection="schools">
+                Магия и явления
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="filters" id="filters-panel">
+        <!-- Универсальный блок фильтров -->
+
+        <!-- Поиск: всегда включен -->
+        <div class="filter-row">
+          <div class="filter-item filter-item-wide">
+            <label for="filter-search-input">Поиск</label>
+            <div class="input-wrap">
+              <span class="input-icon">🔍</span>
+              <input
+                id="filter-search-input"
+                type="text"
+                placeholder="Поиск по названию и описанию"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Динамические фильтры. Все блоки ниже включаются/выключаются через JS. -->
+
+        <!-- Существа -->
+        <div class="filter-row dynamic-filter-row">
+          <div id="filter-class" class="filter-item dynamic-filter">
+            <label for="filter-class-select">Класс</label>
+            <select
+              id="filter-class-select"
+              class="filter-select-control"
+              data-filter-key="class"
+            ></select>
+          </div>
+
+          <div id="filter-type" class="filter-item dynamic-filter">
+            <label for="filter-type-select">Тип</label>
+            <select
+              id="filter-type-select"
+              class="filter-select-control"
+              data-filter-key="type"
+            ></select>
+          </div>
+
+          <div id="filter-danger" class="filter-item dynamic-filter">
+            <label for="filter-danger-select">Уровень опасности</label>
+            <select
+              id="filter-danger-select"
+              class="filter-select-control"
+              data-filter-key="danger"
+            ></select>
+          </div>
+
+          <div id="filter-size" class="filter-item dynamic-filter">
+            <label for="filter-size-select">Размер</label>
+            <select
+              id="filter-size-select"
+              class="filter-select-control"
+              data-filter-key="size"
+            ></select>
+          </div>
+        </div>
+
+        <div class="filter-row dynamic-filter-row">
+          <div id="filter-environment" class="filter-item dynamic-filter">
+            <label for="filter-environment-select">Среда</label>
+            <select
+              id="filter-environment-select"
+              class="filter-select-control"
+              data-filter-key="environment"
+            ></select>
+          </div>
+
+          <div id="filter-intellect" class="filter-item dynamic-filter">
+            <label for="filter-intellect-select">Интеллект</label>
+            <select
+              id="filter-intellect-select"
+              class="filter-select-control"
+              data-filter-key="intellect"
+            ></select>
+          </div>
+
+          <div id="filter-status" class="filter-item dynamic-filter">
+            <label for="filter-status-select">Статус</label>
+            <select
+              id="filter-status-select"
+              class="filter-select-control"
+              data-filter-key="status"
+            ></select>
+          </div>
+
+          <div id="filter-origin" class="filter-item dynamic-filter">
+            <label for="filter-origin-select">Происхождение</label>
+            <select
+              id="filter-origin-select"
+              class="filter-select-control"
+              data-filter-key="origin"
+            ></select>
+          </div>
+        </div>
+
+        <!-- Боги и пантеоны -->
+        <div class="filter-row dynamic-filter-row">
+          <div id="filter-deityLevel" class="filter-item dynamic-filter">
+            <label for="filter-deityLevel-select">Уровень божества</label>
+            <select
+              id="filter-deityLevel-select"
+              class="filter-select-control"
+              data-filter-key="deityLevel"
+            ></select>
+          </div>
+
+          <div id="filter-domain" class="filter-item dynamic-filter">
+            <label for="filter-domain-select">Сфера влияния</label>
+            <select
+              id="filter-domain-select"
+              class="filter-select-control"
+              data-filter-key="domain"
+            ></select>
+          </div>
+
+          <div id="filter-pantheon" class="filter-item dynamic-filter">
+            <label for="filter-pantheon-select">Пантеон</label>
+            <select
+              id="filter-pantheon-select"
+              class="filter-select-control"
+              data-filter-key="pantheon"
+            ></select>
+          </div>
+
+          <div id="filter-aspect" class="filter-item dynamic-filter">
+            <label for="filter-aspect-select">Аспект</label>
+            <select
+              id="filter-aspect-select"
+              class="filter-select-control"
+              data-filter-key="aspect"
+            ></select>
+          </div>
+        </div>
+
+        <div class="filter-row dynamic-filter-row">
+          <div id="filter-worshipType" class="filter-item dynamic-filter">
+            <label for="filter-worshipType-select">Тип поклонения</label>
+            <select
+              id="filter-worshipType-select"
+              class="filter-select-control"
+              data-filter-key="worshipType"
+            ></select>
+          </div>
+
+          <div id="filter-deityStatus" class="filter-item dynamic-filter">
+            <label for="filter-deityStatus-select">Статус божества</label>
+            <select
+              id="filter-deityStatus-select"
+              class="filter-select-control"
+              data-filter-key="status"
+            ></select>
+          </div>
+        </div>
+
+        <!-- Артефакты -->
+        <div class="filter-row dynamic-filter-row">
+          <div id="filter-powerClass" class="filter-item dynamic-filter">
+            <label for="filter-powerClass-select">Класс силы</label>
+            <select
+              id="filter-powerClass-select"
+              class="filter-select-control"
+              data-filter-key="powerClass"
+            ></select>
+          </div>
+
+          <div id="filter-artifactType" class="filter-item dynamic-filter">
+            <label for="filter-artifactType-select">Тип артефакта</label>
+            <select
+              id="filter-artifactType-select"
+              class="filter-select-control"
+              data-filter-key="artifactType"
+            ></select>
+          </div>
+
+          <div id="filter-material" class="filter-item dynamic-filter">
+            <label for="filter-material-select">Материал</label>
+            <select
+              id="filter-material-select"
+              class="filter-select-control"
+              data-filter-key="material"
+            ></select>
+          </div>
+
+          <div id="filter-effect" class="filter-item dynamic-filter">
+            <label for="filter-effect-select">Эффект</label>
+            <select
+              id="filter-effect-select"
+              class="filter-select-control"
+              data-filter-key="effect"
+            ></select>
+          </div>
+        </div>
+
+        <div class="filter-row dynamic-filter-row">
+          <div id="filter-artifactStatus" class="filter-item dynamic-filter">
+            <label for="filter-artifactStatus-select">Статус артефакта</label>
+            <select
+              id="filter-artifactStatus-select"
+              class="filter-select-control"
+              data-filter-key="status"
+            ></select>
+          </div>
+
+          <div id="filter-originEra" class="filter-item dynamic-filter">
+            <label for="filter-originEra-select">Эпоха происхождения</label>
+            <select
+              id="filter-originEra-select"
+              class="filter-select-control"
+              data-filter-key="originEra"
+            ></select>
+          </div>
+
+          <div id="filter-bindingType" class="filter-item dynamic-filter">
+            <label for="filter-bindingType-select">Род привязки</label>
+            <select
+              id="filter-bindingType-select"
+              class="filter-select-control"
+              data-filter-key="bindingType"
+            ></select>
+          </div>
+        </div>
+
+        <!-- Расы и народы -->
+        <div class="filter-row dynamic-filter-row">
+          <div id="filter-raceCategory" class="filter-item dynamic-filter">
+            <label for="filter-raceCategory-select">Категория расы</label>
+            <select
+              id="filter-raceCategory-select"
+              class="filter-select-control"
+              data-filter-key="raceCategory"
+            ></select>
+          </div>
+
+          <div id="filter-civilizationType" class="filter-item dynamic-filter">
+            <label for="filter-civilizationType-select">Тип цивилизации</label>
+            <select
+              id="filter-civilizationType-select"
+              class="filter-select-control"
+              data-filter-key="civilizationType"
+            ></select>
+          </div>
+
+          <div id="filter-devLevel" class="filter-item dynamic-filter">
+            <label for="filter-devLevel-select">Уровень развития</label>
+            <select
+              id="filter-devLevel-select"
+              class="filter-select-control"
+              data-filter-key="devLevel"
+            ></select>
+          </div>
+
+          <div id="filter-habitat" class="filter-item dynamic-filter">
+            <label for="filter-habitat-select">Среда проживания</label>
+            <select
+              id="filter-habitat-select"
+              class="filter-select-control"
+              data-filter-key="habitat"
+            ></select>
+          </div>
+        </div>
+
+        <div class="filter-row dynamic-filter-row">
+          <div id="filter-cultureTraits" class="filter-item dynamic-filter">
+            <label for="filter-cultureTraits-select">Культурные черты</label>
+            <select
+              id="filter-cultureTraits-select"
+              class="filter-select-control"
+              data-filter-key="cultureTraits"
+            ></select>
+          </div>
+
+          <div id="filter-physiology" class="filter-item dynamic-filter">
+            <label for="filter-physiology-select">Физиологические особенности</label>
+            <select
+              id="filter-physiology-select"
+              class="filter-select-control"
+              data-filter-key="physiology"
+            ></select>
+          </div>
+        </div>
+
+        <!-- Локации и регионы -->
+        <div class="filter-row dynamic-filter-row">
+          <div id="filter-locationType" class="filter-item dynamic-filter">
+            <label for="filter-locationType-select">Тип локации</label>
+            <select
+              id="filter-locationType-select"
+              class="filter-select-control"
+              data-filter-key="locationType"
+            ></select>
+          </div>
+
+          <div id="filter-climate" class="filter-item dynamic-filter">
+            <label for="filter-climate-select">Климат</label>
+            <select
+              id="filter-climate-select"
+              class="filter-select-control"
+              data-filter-key="climate"
+            ></select>
+          </div>
+
+          <div id="filter-locationDanger" class="filter-item dynamic-filter">
+            <label for="filter-locationDanger-select">Уровень опасности локации</label>
+            <select
+              id="filter-locationDanger-select"
+              class="filter-select-control"
+              data-filter-key="locationDanger"
+            ></select>
+          </div>
+
+          <div id="filter-locationStatus" class="filter-item dynamic-filter">
+            <label for="filter-locationStatus-select">Статус локации</label>
+            <select
+              id="filter-locationStatus-select"
+              class="filter-select-control"
+              data-filter-key="locationStatus"
+            ></select>
+          </div>
+        </div>
+
+        <div class="filter-row dynamic-filter-row">
+          <div id="filter-locationEra" class="filter-item dynamic-filter">
+            <label for="filter-locationEra-select">Эпоха происхождения локации</label>
+            <select
+              id="filter-locationEra-select"
+              class="filter-select-control"
+              data-filter-key="locationEra"
+            ></select>
+          </div>
+
+          <div id="filter-dominantForce" class="filter-item dynamic-filter">
+            <label for="filter-dominantForce-select">Доминирующая сила</label>
+            <select
+              id="filter-dominantForce-select"
+              class="filter-select-control"
+              data-filter-key="dominantForce"
+            ></select>
+          </div>
+        </div>
+
+        <!-- Магия и явления -->
+        <div class="filter-row dynamic-filter-row">
+          <div id="filter-magicNature" class="filter-item dynamic-filter">
+            <label for="filter-magicNature-select">Природа магии</label>
+            <select
+              id="filter-magicNature-select"
+              class="filter-select-control"
+              data-filter-key="magicNature"
+            ></select>
+          </div>
+
+          <div id="filter-phenomenonType" class="filter-item dynamic-filter">
+            <label for="filter-phenomenonType-select">Тип явления</label>
+            <select
+              id="filter-phenomenonType-select"
+              class="filter-select-control"
+              data-filter-key="phenomenonType"
+            ></select>
+          </div>
+
+          <div id="filter-impactLevel" class="filter-item dynamic-filter">
+            <label for="filter-impactLevel-select">Уровень воздействия</label>
+            <select
+              id="filter-impactLevel-select"
+              class="filter-select-control"
+              data-filter-key="impactLevel"
+            ></select>
+          </div>
+
+          <div id="filter-magicStability" class="filter-item dynamic-filter">
+            <label for="filter-magicStability-select">Стабильность</label>
+            <select
+              id="filter-magicStability-select"
+              class="filter-select-control"
+              data-filter-key="stability"
+            ></select>
+          </div>
+        </div>
+
+        <div class="filter-row dynamic-filter-row">
+          <div id="filter-source" class="filter-item dynamic-filter">
+            <label for="filter-source-select">Источник</label>
+            <select
+              id="filter-source-select"
+              class="filter-select-control"
+              data-filter-key="source"
+            ></select>
+          </div>
+        </div>
+
+        <!-- История и мифы -->
+        <div class="filter-row dynamic-filter-row">
+          <div id="filter-recordType" class="filter-item dynamic-filter">
+            <label for="filter-recordType-select">Тип записи</label>
+            <select
+              id="filter-recordType-select"
+              class="filter-select-control"
+              data-filter-key="recordType"
+            ></select>
+          </div>
+
+          <div id="filter-epoch" class="filter-item dynamic-filter">
+            <label for="filter-epoch-select">Эпоха</label>
+            <select
+              id="filter-epoch-select"
+              class="filter-select-control"
+              data-filter-key="epoch"
+            ></select>
+          </div>
+
+          <div id="filter-sourceForm" class="filter-item dynamic-filter">
+            <label for="filter-sourceForm-select">Форма источника</label>
+            <select
+              id="filter-sourceForm-select"
+              class="filter-select-control"
+              data-filter-key="sourceForm"
+            ></select>
+          </div>
+
+          <div id="filter-reliability" class="filter-item dynamic-filter">
+            <label for="filter-reliability-select">Статус достоверности</label>
+            <select
+              id="filter-reliability-select"
+              class="filter-select-control"
+              data-filter-key="reliability"
+            ></select>
+          </div>
+        </div>
+
+        <div class="filter-row dynamic-filter-row">
+          <div id="filter-topic" class="filter-item dynamic-filter">
+            <label for="filter-topic-select">Тематика</label>
+            <select
+              id="filter-topic-select"
+              class="filter-select-control"
+              data-filter-key="topic"
+            ></select>
+          </div>
+        </div>
+
+        <!-- Организации -->
+        <div class="filter-row dynamic-filter-row">
+          <div id="filter-orgType" class="filter-item dynamic-filter">
+            <label for="filter-orgType-select">Тип организации</label>
+            <select
+              id="filter-orgType-select"
+              class="filter-select-control"
+              data-filter-key="orgType"
+            ></select>
+          </div>
+
+          <div id="filter-orgStatus" class="filter-item dynamic-filter">
+            <label for="filter-orgStatus-select">Статус организации</label>
+            <select
+              id="filter-orgStatus-select"
+              class="filter-select-control"
+              data-filter-key="status"
+            ></select>
+          </div>
+
+          <div id="filter-influence" class="filter-item dynamic-filter">
+            <label for="filter-influence-select">Влияние</label>
+            <select
+              id="filter-influence-select"
+              class="filter-select-control"
+              data-filter-key="influence"
+            ></select>
+          </div>
+
+          <div id="filter-activitySphere" class="filter-item dynamic-filter">
+            <label for="filter-activitySphere-select">Сфера деятельности</label>
+            <select
+              id="filter-activitySphere-select"
+              class="filter-select-control"
+              data-filter-key="activitySphere"
+            ></select>
+          </div>
+        </div>
+
+        <div class="filter-row dynamic-filter-row">
+          <div id="filter-allegiance" class="filter-item dynamic-filter">
+            <label for="filter-allegiance-select">Принадлежность</label>
+            <select
+              id="filter-allegiance-select"
+              class="filter-select-control"
+              data-filter-key="allegiance"
+            ></select>
+          </div>
+        </div>
+
+        <!-- Материалы и компоненты -->
+        <div class="filter-row dynamic-filter-row">
+          <div id="filter-materialType" class="filter-item dynamic-filter">
+            <label for="filter-materialType-select">Тип материала</label>
+            <select
+              id="filter-materialType-select"
+              class="filter-select-control"
+              data-filter-key="materialType"
+            ></select>
+          </div>
+
+          <div id="filter-rarity" class="filter-item dynamic-filter">
+            <label for="filter-rarity-select">Редкость</label>
+            <select
+              id="filter-rarity-select"
+              class="filter-select-control"
+              data-filter-key="rarity"
+            ></select>
+          </div>
+
+          <div id="filter-materialOrigin" class="filter-item dynamic-filter">
+            <label for="filter-materialOrigin-select">Происхождение материала</label>
+            <select
+              id="filter-materialOrigin-select"
+              class="filter-select-control"
+              data-filter-key="origin"
+            ></select>
+          </div>
+
+          <div id="filter-usage" class="filter-item dynamic-filter">
+            <label for="filter-usage-select">Использование</label>
+            <select
+              id="filter-usage-select"
+              class="filter-select-control"
+              data-filter-key="usage"
+            ></select>
+          </div>
+        </div>
+
+        <div class="filter-row dynamic-filter-row">
+          <div id="filter-materialStability" class="filter-item dynamic-filter">
+            <label for="filter-materialStability-select">Стабильность</label>
+            <select
+              id="filter-materialStability-select"
+              class="filter-select-control"
+              data-filter-key="stability"
+            ></select>
+          </div>
+        </div>
+
+        <!-- Языки -->
+        <div class="filter-row dynamic-filter-row">
+          <div id="filter-languageType" class="filter-item dynamic-filter">
+            <label for="filter-languageType-select">Тип языка</label>
+            <select
+              id="filter-languageType-select"
+              class="filter-select-control"
+              data-filter-key="languageType"
+            ></select>
+          </div>
+
+          <div id="filter-complexity" class="filter-item dynamic-filter">
+            <label for="filter-complexity-select">Сложность</label>
+            <select
+              id="filter-complexity-select"
+              class="filter-select-control"
+              data-filter-key="complexity"
+            ></select>
+          </div>
+
+          <div id="filter-transmission" class="filter-item dynamic-filter">
+            <label for="filter-transmission-select">Способ передачи</label>
+            <select
+              id="filter-transmission-select"
+              class="filter-select-control"
+              data-filter-key="transmission"
+            ></select>
+          </div>
+
+          <div id="filter-languageOrigin" class="filter-item dynamic-filter">
+            <label for="filter-languageOrigin-select">Происхождение языка</label>
+            <select
+              id="filter-languageOrigin-select"
+              class="filter-select-control"
+              data-filter-key="languageOrigin"
+            ></select>
+          </div>
+        </div>
+
+        <div class="filter-row dynamic-filter-row">
+          <div id="filter-languageStatus" class="filter-item dynamic-filter">
+            <label for="filter-languageStatus-select">Статус языка</label>
+            <select
+              id="filter-languageStatus-select"
+              class="filter-select-control"
+              data-filter-key="languageStatus"
+            ></select>
+          </div>
+        </div>
+
+        <!-- Шаблоны и генераторы: фильтры скрываются через JS, остается только поиск -->
+
+        <div class="filter-row filter-row-bottom">
+          <p class="filters-hint">
+            Подсказка: фильтры зависят от выбранной главы. Поиск доступен всегда.
+          </p>
+        </div>
+      </section>      <section class="status-bar" id="statusBar"></section>
+
+      <section class="grid" id="grid">
+        <!-- Карточки рендерятся из main.js -->
+      </section>
+    </div>
+  </main>
+
+  <div id="detail-overlay" class="detail-overlay" hidden>
+    <div class="detail-panel">
+      <button class="detail-close" id="detail-close-btn" type="button">×</button>
+      <div id="detail-body"></div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span>Бестиарий — полностью пересобранная локальная версия A.</span>
+      <span>Данные пока захардкожены в <code>js/main.js</code> (массив creatures).</span>
+    </div>
+  </footer>
+</body>
+</html>

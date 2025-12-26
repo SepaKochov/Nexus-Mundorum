@@ -1,0 +1,189 @@
+/* Левое боковое меню бестиария */
+
+.side-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 260px;
+  height: 100vh;
+  padding: 14px 14px 10px;
+  box-sizing: border-box;
+  background: radial-gradient(circle at top left, #020617 0, #020617 45%, #020617 100%);
+  border-right: 1px solid rgba(30, 64, 175, 0.35);
+  color: #e5e7eb;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 50;
+}
+
+/* Чтобы основной контент не залезал под меню */
+body {
+  margin-left: 260px;
+}
+
+/* HEADER В МЕНЮ */
+
+.side-nav__header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.3);
+}
+
+.side-nav__logo-orb {
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  background: radial-gradient(circle at 30% 20%, #fbbf24, #f97316 45%, #7c2d12 75%, transparent 100%);
+  box-shadow:
+    0 0 16px rgba(251, 191, 36, 0.7),
+    0 0 32px rgba(15, 23, 42, 0.8);
+}
+
+.side-nav__title-block {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.side-nav__title {
+  font-size: 14px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.side-nav__subtitle {
+  font-size: 11px;
+  color: #9ca3af;
+}
+
+/* СКРОЛЛ МЕНЮ */
+
+.side-nav__menu {
+  margin-top: 4px;
+  padding-right: 4px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #4b5563 transparent;
+  flex: 1;
+}
+
+.side-nav__menu::-webkit-scrollbar {
+  width: 6px;
+}
+
+.side-nav__menu::-webkit-scrollbar-thumb {
+  background: #4b5563;
+  border-radius: 999px;
+}
+
+/* ГРУППЫ */
+
+.side-nav__group {
+  margin-top: 6px;
+  border-radius: 10px;
+  padding: 2px 0;
+}
+
+.side-nav__group-toggle {
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: #e5e7eb;
+  padding: 6px 6px 6px 4px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background 0.16s ease, color 0.16s ease;
+}
+
+.side-nav__group-toggle:hover {
+  background: rgba(15, 23, 42, 0.9);
+}
+
+.side-nav__group-title {
+  text-align: left;
+}
+
+.side-nav__group-chevron {
+  font-size: 11px;
+  opacity: 0.7;
+  transition: transform 0.16s ease;
+}
+
+/* Активная группа */
+
+.side-nav__group--active > .side-nav__group-toggle {
+  background: linear-gradient(to right, rgba(249, 115, 22, 0.16), transparent);
+  color: #f97316;
+}
+
+.side-nav__group--active > .side-nav__group-toggle .side-nav__group-chevron {
+  transform: rotate(180deg);
+}
+
+/* СПИСОК ПОДКАТЕГОРИЙ */
+
+.side-nav__sublist {
+  list-style: none;
+  margin: 2px 0 0 0;
+  padding: 0 0 4px 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.18s ease;
+}
+
+.side-nav__group--open > .side-nav__sublist {
+  max-height: 600px; /* достаточно, чтобы уместить все элементы */
+}
+
+/* ПУНКТЫ ПОДМЕНЮ */
+
+.side-nav__link {
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: none;
+  padding: 5px 6px 5px 14px;
+  font-size: 11px;
+  color: #9ca3af;
+  cursor: pointer;
+  border-radius: 6px;
+  margin-top: 1px;
+  transition: background 0.14s ease, color 0.14s ease, transform 0.12s ease;
+}
+
+.side-nav__link:hover {
+  background: rgba(15, 23, 42, 0.9);
+  color: #e5e7eb;
+  transform: translateX(2px);
+}
+
+/* Активный пункт */
+
+.side-nav__link--active {
+  background: linear-gradient(to right, rgba(249, 115, 22, 0.3), transparent);
+  color: #fed7aa;
+}
+
+/* FOOTER В МЕНЮ */
+
+.side-nav__footer {
+  padding-top: 6px;
+  border-top: 1px solid rgba(148, 163, 184, 0.3);
+  font-size: 11px;
+  display: flex;
+  justify-content: space-between;
+  color: #9ca3af;
+}
+
+.side-nav__footer-value {
+  color: #f97316;
+}

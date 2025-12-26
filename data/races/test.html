@@ -1,0 +1,67 @@
+async function loadAllRaces() {
+    try {
+        // Загружаем ОБА файла
+        const [mainResponse, subResponse] = await Promise.all([
+            fetch('main.json'),
+            fetch('sub.json')
+        ]);
+        
+        const mainRaces = await mainResponse.json();
+        const subRaces = await subResponse.json();
+        
+        console.log('Основные расы:', mainRaces.length);
+        console.log('Подрасы:', subRaces.length);
+        
+        displayAllRaces(mainRaces, subRaces);
+        
+    } catch (error) {
+        console.error('Ошибка загрузки:', error);
+    }
+}
+
+function displayAllRaces(mainRaces, subRaces) {
+    const container = document.getElementById('races-container');
+    container.innerHTML = '';
+    
+    // Отображаем основные расы
+    mainRaces.forEach(race => {
+        // Находим подрасы для этой расы
+        const raceSubRaces = subRaces.filter(sub => sub.parent_race_id === race.id);
+        
+        const raceCard = document.createElement('div');
+        raceCard.className = 'race-card main-race';
+        raceCard.innerHTML = `
+            <h2>${race.name}</h2>
+            <p class="danger danger-${race.danger}">Опасность: ${race.danger}</p>
+            <p>${race.base.short}</p>
+            <button class="toggle-subraces" data-race-id="${race.id}">
+                Подрасы (${raceSubRaces.length})
+            </button>
+            <div class="subraces-container" id="subraces-${race.id}" style="display: none;">
+                ${raceSubRaces.map(sub => `
+                    <div class="subrace-card">
+                        <h3>${sub.name}</h3>
+                        <p>${sub.base.short}</p>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+        
+        container.appendChild(raceCard);
+    });
+    
+    // Добавляем обработчики для кнопок
+    document.querySelectorAll('.toggle-subraces').forEach(button => {
+        button.addEventListener('click', function() {
+            const raceId = this.getAttribute('data-race-id');
+            const subContainer = document.getElementById(`subraces-${raceId}`);
+            subContainer.style.display = subContainer.style.display === 'none' ? 'block' : 'none';
+            this.textContent = subContainer.style.display === 'none' 
+                ? `Подрасы (${subRaces.filter(sub => sub.parent_race_id == raceId).length})`
+                : 'Скрыть подрасы';
+        });
+    });
+}
+
+// Запускаем загрузку при готовности DOM
+document.addEventListener('DOMContentLoaded', loadAllRaces);

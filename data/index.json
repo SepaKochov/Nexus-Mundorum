@@ -1,0 +1,343 @@
+{
+  "creatures": {
+    "_title": "Существа",
+    "beasts": {
+      "title": "Звери",
+      "path": "data/creatures/beasts.json"
+    },
+    "monsters": {
+      "title": "Чудовища",
+      "path": "data/creatures/monsters.json"
+    },
+    "elementals": {
+      "title": "Элементали",
+      "path": "data/creatures/elementals.json"
+    },
+    "undead": {
+      "title": "Нежить",
+      "path": "data/creatures/undead.json"
+    },
+    "demons": {
+      "title": "Демоны",
+      "path": "data/creatures/demons.json"
+    },
+    "angels": {
+      "title": "Ангелы",
+      "path": "data/creatures/angels.json"
+    },
+    "titans": {
+      "title": "Титаны",
+      "path": "data/creatures/titans.json"
+    },
+    "giants": {
+      "title": "Гиганты",
+      "path": "data/creatures/giants.json"
+    },
+    "aberrations": {
+      "title": "Аберрации",
+      "path": "data/creatures/aberrations.json"
+    },
+    "constructs": {
+      "title": "Конструкты",
+      "path": "data/creatures/constructs.json"
+    },
+    "fey": {
+      "title": "Фейри",
+      "path": "data/creatures/fey.json"
+    },
+    "parasites": {
+      "title": "Паразиты и рои",
+      "path": "data/creatures/parasites.json"
+    },
+    "spirits": {
+      "title": "Духи",
+      "path": "data/creatures/spirits.json"
+    },
+    "planar": {
+      "title": "Планарные существа",
+      "path": "data/creatures/planar.json"
+    },
+    "cosmic": {
+      "title": "Космические существа",
+      "path": "data/creatures/cosmic.json"
+    }
+  },
+  "gods": {
+    "_title": "Боги и пантеоны",
+    "high": {
+      "title": "Высшие боги",
+      "path": "data/gods/high.json"
+    },
+    "lesser": {
+      "title": "Младшие боги",
+      "path": "data/gods/lesser.json"
+    },
+    "ancient": {
+      "title": "Древние божества",
+      "path": "data/gods/ancient.json"
+    },
+    "proto": {
+      "title": "Протобожества",
+      "path": "data/gods/proto.json"
+    },
+    "avatars": {
+      "title": "Аватары",
+      "path": "data/gods/avatars.json"
+    },
+    "domains": {
+      "title": "Домены и сферы влияния",
+      "path": "data/gods/domains.json"
+    },
+    "fallen": {
+      "title": "Падшие и забытые",
+      "path": "data/gods/fallen.json"
+    }
+  },
+  "artifacts": {
+    "_title": "Артефакты",
+    "weapons": {
+      "title": "Оружие",
+      "path": "data/artifacts/weapons.json"
+    },
+    "armors": {
+      "title": "Доспехи",
+      "path": "data/artifacts/armors.json"
+    },
+    "amulets": {
+      "title": "Амулеты и талисманы",
+      "path": "data/artifacts/amulets.json"
+    },
+    "relics": {
+      "title": "Реликвии",
+      "path": "data/artifacts/relics.json"
+    },
+    "runes": {
+      "title": "Руны и сигилы",
+      "path": "data/artifacts/runes.json"
+    },
+    "alchemy": {
+      "title": "Алхимические предметы",
+      "path": "data/artifacts/alchemy.json"
+    },
+    "living": {
+      "title": "Живые артефакты",
+      "path": "data/artifacts/living.json"
+    },
+    "cursed": {
+      "title": "Проклятые артефакты",
+      "path": "data/artifacts/cursed.json"
+    }
+  },
+  "races": {
+    "_title": "Расы и народы",
+    "main": {
+      "title": "Основные расы",
+      "path": "data/races/main.json"
+    },
+    "sub": {
+      "title": "Подрасы",
+      "path": "data/races/sub.json"
+    },
+    "artificial": {
+      "title": "Искусственно созданные",
+      "path": "data/races/artificial.json"
+    },
+    "dynasties": {
+      "title": "Родовые линии и династии",
+      "path": "data/races/dynasties.json"
+    }
+  },
+  "locations": {
+    "_title": "Места и регионы",
+    "continents": {
+      "title": "Континенты и крупные регионы",
+      "path": "data/locations/continents.json"
+    },
+    "states": {
+      "title": "Государства и земли",
+      "path": "data/locations/states.json"
+    },
+    "cities": {
+      "title": "Города и поселения",
+      "path": "data/locations/cities.json"
+    },
+    "biomes": {
+      "title": "Биомы и природные зоны",
+      "path": "data/locations/biomes.json"
+    },
+    "anomalies": {
+      "title": "Аномальные зоны",
+      "path": "data/locations/anomalies.json"
+    },
+    "ruins": {
+      "title": "Руины и заброшенные места",
+      "path": "data/locations/ruins.json"
+    },
+    "planes": {
+      "title": "Планы бытия",
+      "path": "data/locations/planes.json"
+    }
+  },
+  "magic": {
+    "_title": "Магия и явления",
+    "schools": {
+      "title": "Школы магии",
+      "path": "data/magic/schools.json"
+    },
+    "sources": {
+      "title": "Источники магии",
+      "path": "data/magic/sources.json"
+    },
+    "energies": {
+      "title": "Магические энергии",
+      "path": "data/magic/energies.json"
+    },
+    "phenomena": {
+      "title": "Магические феномены",
+      "path": "data/magic/phenomena.json"
+    },
+    "rituals": {
+      "title": "Ритуалы",
+      "path": "data/magic/rituals.json"
+    },
+    "mutations": {
+      "title": "Мутации и искажения",
+      "path": "data/magic/mutations.json"
+    }
+  },
+  "history": {
+    "_title": "История и мифы",
+    "cosmogony": {
+      "title": "Космогония и сотворение мира",
+      "path": "data/history/cosmogony.json"
+    },
+    "eras": {
+      "title": "Эпохи и периоды",
+      "path": "data/history/eras.json"
+    },
+    "events": {
+      "title": "Ключевые события",
+      "path": "data/history/events.json"
+    },
+    "wars": {
+      "title": "Войны и конфликты",
+      "path": "data/history/wars.json"
+    },
+    "heroes": {
+      "title": "Герои и личности",
+      "path": "data/history/heroes.json"
+    },
+    "legends": {
+      "title": "Легенды и предания",
+      "path": "data/history/legends.json"
+    }
+  },
+  "orgs": {
+    "_title": "Организации",
+    "academies": {
+      "title": "Академии и школы",
+      "path": "data/orgs/academies.json"
+    },
+    "guilds": {
+      "title": "Гильдии",
+      "path": "data/orgs/guilds.json"
+    },
+    "orders": {
+      "title": "Ордена",
+      "path": "data/orgs/orders.json"
+    },
+    "cults": {
+      "title": "Культы",
+      "path": "data/orgs/cults.json"
+    },
+    "empires": {
+      "title": "Империи и державы",
+      "path": "data/orgs/empires.json"
+    },
+    "secret": {
+      "title": "Тайные общества",
+      "path": "data/orgs/secret.json"
+    }
+  },
+  "materials": {
+    "_title": "Материалы и компоненты",
+    "metals": {
+      "title": "Металлы",
+      "path": "data/materials/metals.json"
+    },
+    "minerals": {
+      "title": "Минералы и камни",
+      "path": "data/materials/minerals.json"
+    },
+    "alchemy": {
+      "title": "Алхимические реагенты",
+      "path": "data/materials/alchemy.json"
+    },
+    "essences": {
+      "title": "Эссенции",
+      "path": "data/materials/essences.json"
+    },
+    "parts": {
+      "title": "Части существ",
+      "path": "data/materials/parts.json"
+    },
+    "rarities": {
+      "title": "Редкость материалов",
+      "path": "data/materials/rarities.json"
+    }
+  },
+  "languages": {
+    "_title": "Языки",
+    "ancient": {
+      "title": "Древние языки",
+      "path": "data/languages/ancient.json"
+    },
+    "racial": {
+      "title": "Расовые языки",
+      "path": "data/languages/racial.json"
+    },
+    "divine": {
+      "title": "Божественные языки",
+      "path": "data/languages/divine.json"
+    },
+    "demonic": {
+      "title": "Демонические языки",
+      "path": "data/languages/demonic.json"
+    },
+    "magic": {
+      "title": "Языки магии",
+      "path": "data/languages/magic.json"
+    }
+  },
+  "generators": {
+    "_title": "Шаблоны и генераторы",
+    "names": {
+      "title": "Генератор имен",
+      "path": "data/generators/names.json"
+    },
+    "creatures": {
+      "title": "Генератор существ",
+      "path": "data/generators/creatures.json"
+    },
+    "gods": {
+      "title": "Генератор богов",
+      "path": "data/generators/gods.json"
+    },
+    "races": {
+      "title": "Генератор рас",
+      "path": "data/generators/races.json"
+    },
+    "locations": {
+      "title": "Генератор локаций",
+      "path": "data/generators/locations.json"
+    },
+    "artifacts": {
+      "title": "Генератор артефактов",
+      "path": "data/generators/artifacts.json"
+    },
+    "events": {
+      "title": "Генератор событий",
+      "path": "data/generators/events.json"
+    }
+  }
+}

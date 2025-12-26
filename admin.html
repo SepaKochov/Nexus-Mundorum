@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Бестиарий — Админ-панель (Ultra CMS)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Базовые стили (если нужно наследовать шрифты/цвета) -->
+  <link rel="stylesheet" href="css/style.css" />
+
+  <!-- Стили админки -->
+  <link rel="stylesheet" href="css/admin.css" />
+
+  <script src="js/shared/utils.js" defer></script>\n  <script src="js/admin.js" defer></script>
+</head>
+<body class="admin-body">
+  <div class="admin-app">
+    <!-- Боковая панель категорий -->
+    <aside class="admin-sidebar">
+      <div class="admin-logo-block">
+        <div class="admin-logo-orb"></div>
+        <div>
+          <div class="admin-logo-title">BESTIARY CMS</div>
+          <div class="admin-logo-subtitle">Ultra-режим</div>
+        </div>
+      </div>
+
+      <nav class="admin-nav" aria-label="Навигация админ-панели">
+        <div class="admin-nav-section">
+          <div class="admin-nav-section-title">Категории</div>
+                    <div id="adminNavTree" class="admin-nav-tree"></div>
+
+        </div>
+
+        <div class="admin-nav-section">
+          <div class="admin-nav-section-title">Поиск / фильтры</div>
+          <div class="admin-filter-block">
+            <label class="admin-filter-label" for="searchInput">Поиск</label>
+            <input
+              id="searchInput"
+              type="text"
+              class="admin-input"
+              placeholder="Имя, теги, описание..."
+            />
+
+            <label class="admin-filter-label" for="dangerFilter">Опасность</label>
+            <select id="dangerFilter" class="admin-select">
+              <option value="all">Все уровни</option>
+              <option value="S">S</option>
+              <option value="A">A</option>
+              <option value="B">B</option>
+              <option value="C">C</option>
+              <option value="D">D</option>
+            </select>
+
+            <label class="admin-filter-label" for="tagFilter">Тег</label>
+            <input
+              id="tagFilter"
+              type="text"
+              class="admin-input"
+              placeholder="например, 'огонь'"
+            />
+
+            <button id="clearFiltersBtn" class="btn btn-outline btn-small-full">
+              Сбросить фильтры
+            </button>
+          </div>
+        </div>
+
+        <div class="admin-nav-section admin-nav-section--stats">
+          <div class="admin-nav-section-title">Статистика</div>
+          <div class="admin-stats">
+            <div class="admin-stat-row">
+              <span>Всего объектов</span>
+              <span id="statTotal">0</span>
+            </div>
+            <div class="admin-stat-row">
+              <span>По типу</span>
+              <span id="statByKind">—</span>
+            </div>
+            <div class="admin-stat-row">
+              <span>По опасности</span>
+              <span id="statByDanger">—</span>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- Основная область -->
+    <main class="admin-main">
+      <!-- Хедер с заголовком и действиями -->
+      <header class="admin-header">
+        <div>
+          <h1 class="admin-main-title">Панель управления Codex Primordialis</h1>
+          <p class="admin-main-subtitle">
+            Редактирование объектов, теги, описание, изображения и экспорт JSON.
+          </p>
+          <!-- Переключатель между пользовательским режимом и админкой -->
+          <div class="admin-mode-switch">
+            <a href="index.html" class="btn btn-outline admin-mode-btn">Просмотр лора</a>
+            <a href="admin.html" class="btn btn-primary admin-mode-btn admin-mode-btn--active">Админ-панель</a>
+          </div>
+        </div>
+
+        <div class="admin-header-actions">
+          <button id="btnNew" class="btn btn-primary">+ Новый объект</button>
+          <button id="btnDuplicate" class="btn btn-ghost">Дублировать</button>
+          <button id="btnDelete" class="btn btn-danger">Удалить</button>
+          <span class="admin-divider"></span>
+          <button id="btnImport" class="btn btn-outline">Импорт JSON</button>
+          <button id="btnExport" class="btn btn-outline">Экспорт JSON</button>
+        </div>
+      </header>
+
+      <!-- Основной layout: таблица + редактор -->
+      <section class="admin-layout">
+        <!-- Таблица объектов -->
+        <div class="admin-panel admin-panel-left">
+          <div class="panel-header">
+            <div class="panel-title">Объекты</div>
+            <div class="panel-meta">
+              <span id="objectsCounter">0 объектов</span>
+            </div>
+          </div>
+
+          <div class="admin-table-wrapper">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Имя</th>
+                  <th>Тип</th>
+                  <th>Класс / вид</th>
+                  <th>Опасность</th>
+                  <th>Теги</th>
+                </tr>
+              </thead>
+              <tbody id="objectsTableBody">
+                <!-- строки заполняются JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Редактор справа -->
+        <div class="admin-panel admin-panel-right">
+          <div class="panel-header">
+            <div class="panel-title">Редактор</div>
+            <div class="panel-meta">
+              <span id="editorStatus">Нет изменений</span>
+            </div>
+          </div>
+
+          <form id="editorForm" class="editor-form">
+            <div class="editor-grid">
+              <div class="editor-col">
+                <label class="editor-label" for="fieldId">ID</label>
+                <input
+                  id="fieldId"
+                  name="id"
+                  type="text"
+                  class="admin-input"
+                  readonly
+                />
+
+                <label class="editor-label" for="fieldName">Имя*</label>
+                <input
+                  id="fieldName"
+                  name="name"
+                  type="text"
+                  class="admin-input"
+                  placeholder="Алый дракон"
+                  required
+                />
+
+                <label class="editor-label" for="fieldKind">Тип объекта</label>
+                <input
+                  id="fieldKind"
+                  name="kind"
+                  type="text"
+                  class="admin-input"
+                  placeholder="creature, god, artifact..."
+                />
+
+                <label class="editor-label" for="fieldType">Класс / вид</label>
+                <input
+                  id="fieldType"
+                  name="type"
+                  type="text"
+                  class="admin-input"
+                  placeholder="дракон, дух, артефакт..."
+                />
+
+                <label class="editor-label" for="fieldDanger">Опасность</label>
+                <input
+                  id="fieldDanger"
+                  name="danger"
+                  type="text"
+                  class="admin-input"
+                  placeholder="S, A, B..."
+                />
+
+                <label class="editor-label" for="fieldTags">Теги (через запятую)</label>
+                <input
+                  id="fieldTags"
+                  name="tags"
+                  type="text"
+                  class="admin-input"
+                  placeholder="огонь, летающий, босс"
+                />
+
+                <label class="editor-label" for="fieldOrigin">Происхождение / мир</label>
+                <input
+                  id="fieldOrigin"
+                  name="origin"
+                  type="text"
+                  class="admin-input"
+                  placeholder="Северные легенды, Пантеон..."
+                />
+
+                <label class="editor-label" for="fieldHabitat">Среда обитания</label>
+                <input
+                  id="fieldHabitat"
+                  name="habitat"
+                  type="text"
+                  class="admin-input"
+                  placeholder="горы, лес, подземелья..."
+                />
+              </div>
+
+              <div class="editor-col">
+                <label class="editor-label" for="fieldElement">Стихия / аспект</label>
+                <input
+                  id="fieldElement"
+                  name="element"
+                  type="text"
+                  class="admin-input"
+                  placeholder="огонь, лед, аркана..."
+                />
+
+                <label class="editor-label" for="fieldRole">Роль</label>
+                <input
+                  id="fieldRole"
+                  name="role"
+                  type="text"
+                  class="admin-input"
+                  placeholder="босс, страж, дух, артефакт..."
+                />
+
+                <label class="editor-label" for="fieldIntellect">Интеллект</label>
+                <input
+                  id="fieldIntellect"
+                  name="intellect"
+                  type="text"
+                  class="admin-input"
+                  placeholder="низкий, средний, высокий..."
+                />
+
+                <label class="editor-label" for="fieldTemperament">Темперамент</label>
+                <input
+                  id="fieldTemperament"
+                  name="temperament"
+                  type="text"
+                  class="admin-input"
+                  placeholder="агрессивный, спокойный..."
+                />
+
+                <label class="editor-label" for="fieldSize">Размер</label>
+                <input
+                  id="fieldSize"
+                  name="size"
+                  type="text"
+                  class="admin-input"
+                  placeholder="малый, средний, огромный..."
+                />
+
+                <label class="editor-label" for="fieldSpeed">Скорость</label>
+                <input
+                  id="fieldSpeed"
+                  name="speed"
+                  type="text"
+                  class="admin-input"
+                  placeholder="медленная, быстрая..."
+                />
+
+                <label class="editor-label" for="fieldPower">Сила</label>
+                <input
+                  id="fieldPower"
+                  name="power"
+                  type="text"
+                  class="admin-input"
+                  placeholder="средняя, высокая, мифическая..."
+                />
+
+                <label class="editor-label" for="fieldResilience">Живучесть</label>
+                <input
+                  id="fieldResilience"
+                  name="resilience"
+                  type="text"
+                  class="admin-input"
+                  placeholder="низкая, средняя, высокая..."
+                />
+
+                <label class="editor-label" for="fieldMagicLevel">Уровень магии</label>
+                <input
+                  id="fieldMagicLevel"
+                  name="magicLevel"
+                  type="text"
+                  class="admin-input"
+                  placeholder="низкий, средний, высокий..."
+                />
+
+                <label class="editor-label" for="fieldAge">Возраст / эпоха</label>
+                <input
+                  id="fieldAge"
+                  name="age"
+                  type="text"
+                  class="admin-input"
+                  placeholder="древний, молодой..."
+                />
+
+                <label class="editor-label" for="fieldRarity">Редкость</label>
+                <input
+                  id="fieldRarity"
+                  name="rarity"
+                  type="text"
+                  class="admin-input"
+                  placeholder="обычный, редкий, легендарный..."
+                />
+              </div>
+            </div>
+
+            <div class="editor-grid editor-grid--bottom">
+              <div class="editor-col">
+                <label class="editor-label" for="fieldBehavior">Поведение (по строкам)</label>
+                <textarea
+                  id="fieldBehavior"
+                  name="behavior"
+                  class="admin-textarea"
+                  rows="4"
+                  placeholder="каждая строка — отдельный пункт поведения"
+                ></textarea>
+
+                <label class="editor-label" for="fieldWeaknesses">Слабости (по строкам)</label>
+                <textarea
+                  id="fieldWeaknesses"
+                  name="weaknesses"
+                  class="admin-textarea"
+                  rows="3"
+                  placeholder="каждая строка — отдельная слабость"
+                ></textarea>
+
+                <label class="editor-label" for="fieldAbilities">Способности (формат: Имя — описание)</label>
+                <textarea
+                  id="fieldAbilities"
+                  name="abilities"
+                  class="admin-textarea"
+                  rows="4"
+                  placeholder="Пламя горных глубин — дыхание дракона расплавляет камень..."
+                ></textarea>
+              </div>
+
+              <div class="editor-col">
+                <label class="editor-label" for="fieldRelated">
+                  Связанные объекты (формат: тип: имя)
+                </label>
+                <textarea
+                  id="fieldRelated"
+                  name="related"
+                  class="admin-textarea"
+                  rows="3"
+                  placeholder="location: Обсидиановая цитадель&#10;artifact: Клинок Падшей Зари"
+                ></textarea>
+
+                <label class="editor-label" for="fieldImage">Путь к картинке</label>
+                <input
+                  id="fieldImage"
+                  name="image"
+                  type="text"
+                  class="admin-input"
+                  placeholder="assets/creatures/alyi-drakon.png"
+                />
+
+                <label class="editor-label" for="fieldImageUpload">Загрузка изображения (preview, без автосохранения)</label>
+                <input
+                  id="fieldImageUpload"
+                  type="file"
+                  accept="image/*"
+                  class="admin-input"
+                />
+                <div class="image-preview" id="imagePreview">
+                  <span class="image-preview-placeholder">Нет изображения</span>
+                </div>
+
+                <p class="hint">
+                  Файл нужно вручную положить в папку <code>assets/…</code>, поле выше хранит только путь.
+                </p>
+              </div>
+            </div>
+
+            <div class="editor-description-block">
+              <div class="editor-col">
+                <label class="editor-label" for="fieldDescription">Описание (markdown)</label>
+                <textarea
+                  id="fieldDescription"
+                  name="description"
+                  class="admin-textarea"
+                  rows="8"
+                  placeholder="Подробное описание существа..."
+                ></textarea>
+              </div>
+
+              <div class="editor-col">
+                <label class="editor-label">Предпросмотр описания</label>
+                <div class="admin-preview" id="descriptionPreview">
+                  Тут появится предпросмотр описания.
+                </div>
+              </div>
+            </div>
+
+            <div class="editor-actions">
+              <button type="submit" class="btn btn-primary">
+                💾 Сохранить изменения
+              </button>
+              <button type="button" class="btn btn-ghost" id="btnRevert">
+                ↩ Отменить несохраненные
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
