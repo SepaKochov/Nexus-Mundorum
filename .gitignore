@@ -27,3 +27,6 @@ _backups/
 node_modules/
 dist/
 build/
+
+# Local helper scripts
+Pull_Nexus.bat
