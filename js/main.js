@@ -297,7 +297,7 @@ async function loadCategory(section, subsection) {
   }
 
   try {
-    const response = await fetch(path);
+    const response = await fetch(path, { cache: "no-store" });
     if (!response.ok) throw new Error("Файл не найден");
 
     const json = await response.json();
@@ -1127,4 +1127,3 @@ function renderCards(list) {
     true
   );
 })();;
-
