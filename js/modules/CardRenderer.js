@@ -268,7 +268,9 @@ export function renderCards(list, options = {}) {
     card.className = "card";
     card.dataset.section = sectionKey;
     if (sectionKey === "artifacts") {
-      card.classList.add("card--artifacts");
+      card.classList.add("artifact-card", "card--artifacts");
+    } else {
+      card.classList.add("creature-card");
     }
 
     const name = escapeHtml(entity.name || "Без имени");
