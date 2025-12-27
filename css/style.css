@@ -214,6 +214,21 @@ body {
   color: #f3f4f6;
 }
 
+.pill--power {
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  background: radial-gradient(circle at top, #7c3aed, #4338ca);
+  border-color: rgba(192, 132, 252, 0.9);
+  color: #f5f3ff;
+  text-transform: uppercase;
+}
+
+.pill--artifact {
+  background: radial-gradient(circle at top, rgba(8, 47, 73, 0.8), rgba(15, 23, 42, 0.95));
+  border-color: rgba(125, 211, 252, 0.6);
+  color: #e2e8f0;
+}
+
 /* ========== MAIN LAYOUT ========== */
 
 .main {
@@ -779,4 +794,3 @@ body.start-mode .grid {
 body.start-mode .container {
   display: block !important;
 }
-
