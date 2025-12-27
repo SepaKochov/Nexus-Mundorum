@@ -287,20 +287,36 @@ async function loadCategory(section, subsection) {
 
   const loader = document.getElementById("loader");
   const loadError = document.getElementById("loadError");
+  const loadErrorDetails = document.getElementById("loadErrorDetails");
   const retryBtn = document.getElementById("retryBtn");
 
   // Сбрасываем состояние
   if (loader) loader.style.display = "block";
   if (loadError) loadError.style.display = "none";
+  if (loadErrorDetails) {
+    loadErrorDetails.style.display = "none";
+    loadErrorDetails.textContent = "";
+  }
   if (statusBar) {
     statusBar.textContent = `Загрузка данных: ${section}/${subsection}…`;
   }
+
+  let parseErrorInfo = null;
 
   try {
     const response = await fetch(path, { cache: "no-store" });
     if (!response.ok) throw new Error("Файл не найден");
 
-    const json = await response.json();
+    let json;
+    try {
+      json = await response.json();
+    } catch (parseErr) {
+      if (parseErr instanceof SyntaxError) {
+        parseErrorInfo = { url: path, message: parseErr.message };
+        console.error("JSON parse error", path, parseErr.message);
+      }
+      throw parseErr;
+    }
     if (!Array.isArray(json)) throw new Error("Ожидался массив объектов");
 
     creaturesData = json;
@@ -309,14 +325,27 @@ async function loadCategory(section, subsection) {
 
     if (loader) loader.style.display = "none";
   } catch (err) {
-    console.error("Ошибка загрузки:", err);
+    if (!parseErrorInfo) {
+      console.error("Ошибка загрузки:", err);
+    }
     creaturesData = [];
     renderCards([]);
 
     if (loader) loader.style.display = "none";
     if (loadError) loadError.style.display = "block";
+    if (loadErrorDetails) {
+      if (parseErrorInfo) {
+        loadErrorDetails.textContent = `Ошибка JSON: ${parseErrorInfo.url}. Проверь синтаксис (запятая/скобка).`;
+        loadErrorDetails.style.display = "block";
+      } else {
+        loadErrorDetails.style.display = "none";
+        loadErrorDetails.textContent = "";
+      }
+    }
     if (statusBar) {
-      statusBar.textContent = `Ошибка загрузки: ${section}/${subsection}`;
+      statusBar.textContent = parseErrorInfo
+        ? `Ошибка загрузки: неверный JSON ${section}/${subsection}`
+        : `Ошибка загрузки: ${section}/${subsection}`;
     }
 
     if (retryBtn) {
