@@ -381,6 +381,7 @@ select {
   display: flex;
   flex-direction: column;
   gap: 6px;
+  overflow: hidden;
   transition:
     transform 0.18s ease-out,
     box-shadow 0.18s ease-out,
@@ -452,6 +453,7 @@ select {
   flex-wrap: wrap;
   gap: 6px;
   margin-top: 4px;
+  max-width: 100%;
 }
 
 /* Цветные теги: цвет прилетает из main.js через inline-style */
@@ -465,6 +467,10 @@ select {
   border: 1px solid transparent;
   cursor: pointer;
   user-select: none;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   transition:
     background 0.2s ease,
     transform 0.15s ease,
