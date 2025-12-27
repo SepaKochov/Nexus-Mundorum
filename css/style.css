@@ -434,9 +434,13 @@ select {
   letter-spacing: 0.07em;
   text-transform: uppercase;
   color: var(--text-main);
-  max-width: 55%;
   line-height: 1.2;
   word-break: break-word;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .card-subtitle {
@@ -479,6 +483,47 @@ select {
   gap: 6px;
   margin-top: 0;
   max-width: 45%;
+}
+
+.card--artifacts .card-header {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+}
+
+.card--artifacts .card-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.card--artifacts .card-title-block {
+  max-width: 100%;
+  padding-right: 12px;
+}
+
+.card--artifacts .card-title {
+  padding-right: 96px;
+}
+
+.card--artifacts .card-badges {
+  flex-direction: row;
+  gap: 6px;
+}
+
+.card--artifacts .card-tags {
+  justify-content: flex-start;
+  max-width: 100%;
+  max-height: 48px;
+  overflow: hidden;
+}
+
+.card-header-chips {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
 }
 
 /* Цветные теги: цвет прилетает из main.js через inline-style */
@@ -641,6 +686,107 @@ select {
 .detail-section li {
   font-size: 13px;
   line-height: 1.45;
+}
+
+.detail-card {
+  background: rgba(17, 24, 39, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  border-radius: var(--radius-lg);
+  padding: 14px 16px;
+  box-shadow: var(--shadow-soft);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.detail-card__header {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.detail-card__header-main {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.detail-card__name {
+  margin: 0;
+  font-size: 18px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.detail-card__subtitle {
+  margin: 2px 0 0;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.detail-card__badges {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.detail-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.detail-info {
+  list-style: none;
+  padding: 0;
+  margin: 4px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.detail-info__row {
+  display: flex;
+  gap: 6px;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.detail-info__label {
+  color: var(--text-muted);
+}
+
+.detail-info__value {
+  color: var(--text-main);
+}
+
+.detail-text {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--text-main);
+}
+
+.detail-list {
+  margin: 6px 0 0 18px;
+  padding: 0;
+}
+
+.detail-list li {
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.detail-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tag-pill--static {
+  cursor: default;
 }
 
 /* ==========================
