@@ -120,13 +120,7 @@ function renderTagsHtml(tags) {
             >${escapeHtml(text)}</button>`;
   });
 
-  return `
-    <footer class="card-footer">
-      <div class="card-tags">
-        ${items.join("")}
-      </div>
-    </footer>
-  `;
+  return `<div class="card-tags">${items.join("")}</div>`;
 }
 
 function attachInteractions(cardEl, entity, context) {
@@ -242,12 +236,15 @@ export function renderCards(list, options = {}) {
 
     card.innerHTML = `
       <header class="card-header">
-        <div>
+        <div class="card-title-block">
           <h3 class="card-title">${name}</h3>
           <p class="card-subtitle">${subtitle}</p>
         </div>
-        <div class="card-badges">
-          ${badgesHtml}
+        <div class="card-header-meta">
+          <div class="card-badges">
+            ${badgesHtml}
+          </div>
+          ${tagsHtml}
         </div>
       </header>
 
@@ -255,7 +252,6 @@ export function renderCards(list, options = {}) {
         <p class="card-text">${escapeHtml(descShort || "Описание пока пустое.")}</p>
       </div>
 
-      ${tagsHtml}
     `;
 
     attachInteractions(card, entity, {
