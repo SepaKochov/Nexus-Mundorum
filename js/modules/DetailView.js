@@ -2,6 +2,7 @@
 
 import * as DetailGods from "./DetailGods.js";
 import * as DetailCreatures from "./DetailCreatures.js";
+import * as DetailArtifacts from "./DetailArtifacts.js";
 
 /**
  * Вспомогательный вызов модуля-рендера:
@@ -87,6 +88,19 @@ export function renderDetailView(chapterKey, entity, container) {
     const ok = callRenderer(
       DetailCreatures,
       "renderCreatureDetail",
+      entity,
+      container,
+      key
+    );
+    if (!ok) renderFallbackDetail(entity, container, key);
+    return;
+  }
+
+  // Артефакты — модуль DetailArtifacts
+  if (/^artifacts/i.test(key)) {
+    const ok = callRenderer(
+      DetailArtifacts,
+      "renderArtifactDetail",
       entity,
       container,
       key

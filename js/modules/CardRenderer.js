@@ -100,7 +100,7 @@ function renderBadgesHtml(badges) {
     .join("");
 }
 
-function renderTagsHtml(tags) {
+function renderTagsHtml(tags, className = "card-tags") {
   if (!tags.length) return "";
 
   const items = tags.map(t => {
@@ -120,7 +120,51 @@ function renderTagsHtml(tags) {
             >${escapeHtml(text)}</button>`;
   });
 
-  return `<div class="card-tags">${items.join("")}</div>`;
+  return `<div class="${className}">${items.join("")}</div>`;
+}
+
+function collectArtifactChips(entity) {
+  const chips = [];
+  const seen = new Set();
+
+  const pushVal = (value, labelPrefix = "") => {
+    if (!value) return;
+    if (Array.isArray(value)) {
+      value.forEach(v => pushVal(v, labelPrefix));
+      return;
+    }
+    const text = String(value).trim();
+    if (!text) return;
+    const finalText = labelPrefix ? `${labelPrefix}: ${text}` : text;
+    if (seen.has(finalText)) return;
+    seen.add(finalText);
+    chips.push(finalText);
+  };
+
+  pushVal(entity.aspects);
+
+  if (entity.tags && typeof entity.tags === "object") {
+    if (Array.isArray(entity.tags)) {
+      entity.tags.forEach(pushVal);
+    } else {
+      Object.values(entity.tags).forEach(pushVal);
+    }
+  }
+
+  const origin = entity.origin || {};
+  const era = origin["эра"] || origin["эпоха"] || origin.era || origin.epoch || entity.originEra;
+  const pantheon = origin["пантеон"] || origin.pantheon;
+  const deity = origin["божество"] || origin.deity || origin.god;
+  const nature = origin["природа"] || origin.nature;
+  const originName = origin["происхождение"] || origin.origin;
+
+  pushVal(era, "Эпоха");
+  pushVal(originName, "Источник");
+  pushVal(pantheon, "Пантеон");
+  pushVal(deity, "Божество");
+  pushVal(nature, "Природа");
+
+  return chips;
 }
 
 function attachInteractions(cardEl, entity, context) {
@@ -223,6 +267,9 @@ export function renderCards(list, options = {}) {
     const card = document.createElement("article");
     card.className = "card";
     card.dataset.section = sectionKey;
+    if (sectionKey === "artifacts") {
+      card.classList.add("card--artifacts");
+    }
 
     const name = escapeHtml(entity.name || "Без имени");
     const subtitle = escapeHtml(buildSubtitle(entity, sectionKey));
@@ -233,28 +280,56 @@ export function renderCards(list, options = {}) {
 
     const badges = buildBadges(entity, sectionKey);
     const badgesHtml = renderBadgesHtml(badges);
-    const tagsHtml = renderTagsHtml(tags);
-    const headerTagsHtml = tagsHtml || `<div class="card-tags"></div>`;
+    if (sectionKey === "artifacts") {
+      const artifactChips = collectArtifactChips(entity);
+      const chipsHtml = artifactChips.length
+        ? renderTagsHtml(artifactChips, "card-tags card-tags--artifacts")
+        : `<div class="card-tags card-tags--artifacts"></div>`;
 
-    card.innerHTML = `
-      <div class="card-header">
-        <div class="card-title-block">
-          <h3 class="card-title">${name}</h3>
-          <p class="card-subtitle">${subtitle}</p>
-        </div>
-        <div class="card-header-meta">
-          <div class="card-badges">
-            ${badgesHtml}
+      card.innerHTML = `
+        <div class="card-header card-header--artifacts">
+          <div class="card-title-row">
+            <div class="card-title-block">
+              <h3 class="card-title">${name}</h3>
+              <p class="card-subtitle">${subtitle}</p>
+            </div>
+            <div class="card-badges">
+              ${badgesHtml}
+            </div>
           </div>
-          ${headerTagsHtml}
+          <div class="card-header-chips">
+            ${chipsHtml}
+          </div>
         </div>
-      </div>
 
-      <div class="card-body">
-        <p class="card-text">${escapeHtml(descShort || "Описание пока пустое.")}</p>
-      </div>
+        <div class="card-body">
+          <p class="card-text">${escapeHtml(descShort || "Описание пока пустое.")}</p>
+        </div>
+      `;
+    } else {
+      const tagsHtml = renderTagsHtml(tags);
+      const headerTagsHtml = tagsHtml || `<div class="card-tags"></div>`;
 
-    `;
+      card.innerHTML = `
+        <div class="card-header">
+          <div class="card-title-block">
+            <h3 class="card-title">${name}</h3>
+            <p class="card-subtitle">${subtitle}</p>
+          </div>
+          <div class="card-header-meta">
+            <div class="card-badges">
+              ${badgesHtml}
+            </div>
+            ${headerTagsHtml}
+          </div>
+        </div>
+
+        <div class="card-body">
+          <p class="card-text">${escapeHtml(descShort || "Описание пока пустое.")}</p>
+        </div>
+
+      `;
+    }
 
     attachInteractions(card, entity, {
       detailOverlay: options.detailOverlay,
