@@ -1,6 +1,4 @@
-import { getShortDescriptionForCard, getLongDescriptionForDetails } from "./modules/TagSystem.js";
-import { getTagsForCard } from "./modules/TagSystemUnified.js";
-import { openDetailCard } from "./modules/DetailView.js";
+import { renderCards as renderCardsModule } from "./modules/CardRenderer.js";
 // ==========================
 //  ГЛОБАЛЬНОЕ СОСТОЯНИЕ
 // ==========================
@@ -912,191 +910,17 @@ window.renderCards = renderCards;
 // ==========================
 
 function renderCards(list) {
-  if (!creaturesContainer) {
-    console.error("Контейнер для карточек не найден (#creatures-container или #grid).");
-    return;
-  }
-
-  creaturesContainer.innerHTML = "";
-
-  if (!list || list.length === 0) {
-    creaturesContainer.innerHTML = `
-      <div class="empty-message">
-        <p>Нет данных в этой категории.</p>
-      </div>`;
-    updateStatusBar(0);
-    return;
-  }
-
-  list.forEach(creature => {
-    const card = document.createElement("article");
-    card.className = "card";
-
-    const name = escapeHtml(creature.name || "Без имени");
-    const type = escapeHtml(creature.type || creature.kind || "Неизвестный тип");
-    const danger = (currentSection === "gods")
-      ? ""
-      : (creature.danger || "").toUpperCase();
-    const element = escapeHtml(creature.element || "");
-    const originText = typeof getOriginText === "function"
-      ? getOriginText(creature.origin)
-      : (creature.origin || "");
-    let tags = [];
-    if (typeof getTagsForCard === "function") {
-      try {
-        const res = getTagsForCard(creature, currentSection);
-        if (Array.isArray(res)) {
-          tags = res;
-        } else if (Array.isArray(creature.tags)) {
-          tags = creature.tags;
-        }
-      } catch (e) {
-        console.error("Ошибка генерации тегов для объекта:", creature, e);
-        if (Array.isArray(creature.tags)) {
-          tags = creature.tags;
-        }
-      }
-    } else if (Array.isArray(creature.tags)) {
-      tags = creature.tags;
-    }
-
-    // Дополнительная генерация тегов для богов, если система тегов ничего не вернула
-    if ((!tags || !tags.length) && currentSection === "gods") {
-      tags = [];
-
-      const pushTag = (key, value, label) => {
-        if (!value) return;
-        const text = String(value).trim();
-        if (!text) return;
-        tags.push({ key, value: text, label: label || text });
-      };
-
-      // уровень божества
-      const deityLevel = creature.deityLevel || creature.deity_level;
-      pushTag("deityLevel", deityLevel);
-
-      // сфера влияния / домен
-      const domainType =
-        creature.domain_type ||
-        (creature.domain && (creature.domain.type || creature.domain.name));
-      pushTag("domain_type", domainType);
-
-      // пантеон
-      pushTag("pantheon", creature.pantheon);
-
-      // аспект
-      pushTag("aspect", creature.aspect);
-
-      // тип поклонения
-      const worshipType =
-        creature.worshipType ||
-        (creature.worship && (creature.worship.cult_type || creature.worship.type));
-      pushTag("worshipType", worshipType);
-
-      // статус / выравнивание
-      const status = creature.status || creature.allegiance || creature.alignment;
-      pushTag("status", status);
-    }
-
-    const rawShort = (typeof getShortDescriptionForCard === "function")
-      ? getShortDescriptionForCard(creature, currentSection, originText)
-      : (creature.description || creature.flavor || creature.summary || originText || "");
-    const descShort = shorten(rawShort, 200);
-
-    card.innerHTML = `
-      <header class="card-header">
-        <div>
-          <h3 class="card-title">${name}</h3>
-          <p class="card-subtitle">${type}</p>
-        </div>
-        <div class="card-badges">
-          ${
-            element
-              ? `<span class="pill pill--element" data-type="${element}">${element}</span>`
-              : ""
-          }
-          ${
-            danger
-              ? `<span class="pill pill--danger" data-danger="${danger}">Опасность ${danger}</span>`
-              : ""
-          }
-        </div>
-      </header>
-
-      <div class="card-body">
-        <p class="card-text">${escapeHtml(descShort || "Описание пока пустое.")}</p>
-      </div>
-
-      ${
-        tags.length
-          ? `<footer class="card-footer">
-               <div class="card-tags">
-                 ${tags
-                                      .map(t => {
-                     const isObject = t && typeof t === "object";
-                     const text = isObject
-                       ? (t.label || String(t.value || ""))
-                       : String(t);
-                     const color = tagColorFromText(text);
-                     const key = isObject ? (t.key || "") : "";
-                     const value = isObject ? String(t.value ?? "") : text;
-                     const dataAttrs = key
-                       ? `data-tag="${escapeHtml(text)}" data-tag-key="${escapeHtml(key)}" data-tag-value="${escapeHtml(value)}"`
-                       : `data-tag="${escapeHtml(text)}"`;
-                     return `<button 
-                               type="button" 
-                               class="tag-pill" 
-                               ${dataAttrs}
-                               style="background:${color}; border-color:${color};"
-                             >${escapeHtml(text)}</button>`;
-                   }).join("")}
-               </div>
-             </footer>`
-          : ""
-      }
-    `;
-
-    // Клик по карточке — открываем подробную
-    card.addEventListener("click", () => openDetailCard(creature, { detailOverlay, detailContent, searchInput, applyFilters, section: currentSection }));;
-
-    // Клик по тегу — применяем поиск по тегу
-    card.querySelectorAll(".tag-pill").forEach(btn => {
-      btn.addEventListener("click", e => {
-        e.stopPropagation();
-        const tag = btn.dataset.tag || "";
-        if (searchInput) {
-          searchInput.value = tag;
-        }
-        applyFilters();
-      });
-    });
-
-    // Клик по элементу
-    card.querySelectorAll(".pill[data-type]").forEach(btn => {
-      btn.addEventListener("click", e => {
-        e.stopPropagation();
-        if (elementFilter && btn.dataset.type) {
-          elementFilter.value = btn.dataset.type;
-          applyFilters();
-        }
-      });
-    });
-
-    // Клик по опасности
-    card.querySelectorAll(".pill[data-danger]").forEach(btn => {
-      btn.addEventListener("click", e => {
-        e.stopPropagation();
-        if (dangerFilter && btn.dataset.danger) {
-          dangerFilter.value = btn.dataset.danger;
-          applyFilters();
-        }
-      });
-    });
-
-    creaturesContainer.appendChild(card);
+  renderCardsModule(list, {
+    container: creaturesContainer,
+    section: currentSection,
+    detailOverlay,
+    detailContent,
+    searchInput,
+    elementFilter,
+    dangerFilter,
+    applyFilters,
+    updateStatusBar
   });
-
-  updateStatusBar(list.length);
 }
 
 
