@@ -222,6 +222,7 @@ export function renderCards(list, options = {}) {
   list.forEach(entity => {
     const card = document.createElement("article");
     card.className = "card";
+    card.dataset.section = sectionKey;
 
     const name = escapeHtml(entity.name || "Без имени");
     const subtitle = escapeHtml(buildSubtitle(entity, sectionKey));
@@ -233,9 +234,10 @@ export function renderCards(list, options = {}) {
     const badges = buildBadges(entity, sectionKey);
     const badgesHtml = renderBadgesHtml(badges);
     const tagsHtml = renderTagsHtml(tags);
+    const headerTagsHtml = tagsHtml || `<div class="card-tags"></div>`;
 
     card.innerHTML = `
-      <header class="card-header">
+      <div class="card-header">
         <div class="card-title-block">
           <h3 class="card-title">${name}</h3>
           <p class="card-subtitle">${subtitle}</p>
@@ -244,9 +246,9 @@ export function renderCards(list, options = {}) {
           <div class="card-badges">
             ${badgesHtml}
           </div>
-          ${tagsHtml}
+          ${headerTagsHtml}
         </div>
-      </header>
+      </div>
 
       <div class="card-body">
         <p class="card-text">${escapeHtml(descShort || "Описание пока пустое.")}</p>
