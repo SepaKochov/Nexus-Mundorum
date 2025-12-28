@@ -55,7 +55,6 @@
 
   <!-- Логика бокового навигационного меню -->
   <script src="js/nav.js" defer></script>
-  <link rel="stylesheet" href="css/chapters/creatures/beasts.css" />
 </head>
 
 <body>

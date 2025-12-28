@@ -1,6 +1,4 @@
 import { renderCards as renderCardsModule } from "./modules/CardRenderer.js";
-import { renderBeasts } from "./chapters/creatures/beasts/BeastsRenderer.js";
-
 // ==========================
 //  ГЛОБАЛЬНОЕ СОСТОЯНИЕ
 // ==========================
@@ -8,26 +6,6 @@ import { renderBeasts } from "./chapters/creatures/beasts/BeastsRenderer.js";
 let creaturesData = [];
 let currentSection = "creatures";
 let currentSubsection = "beasts";
-
-// ==========================
-//  КЛАСС СТРАНИЦЫ ДЛЯ НЭЙМСПЕЙСА СТИЛЕЙ
-// ==========================
-function setChapterClass(section, subsection) {
-  const body = document.body;
-  if (!body) return;
-
-  // чистим старые chapter-* классы
-  body.className = body.className
-    .split(/\s+/)
-    .filter(c => c && !c.startsWith("chapter-"))
-    .join(" ");
-
-  const safeSection = String(section || "").replace(/[^a-z0-9_-]/gi, "-").toLowerCase();
-  const safeSub = String(subsection || "").replace(/[^a-z0-9_-]/gi, "-").toLowerCase();
-  body.classList.add(`chapter-${safeSection}-${safeSub}`);
-}
-
-
 
 // ==========================
 //  DOM-ЭЛЕМЕНТЫ
@@ -302,8 +280,6 @@ async function loadCategory(section, subsection) {
   currentSection = section;
   currentSubsection = subsection;
 
-
-  setChapterClass(currentSection, currentSubsection);
   const path = `data/${section}/${subsection}.json`;
   console.log("ЗАГРУЗКА:", path);
 
@@ -934,21 +910,6 @@ window.renderCards = renderCards;
 // ==========================
 
 function renderCards(list) {
-  // Изоляция подкатегории "Звери": отдельный рендерер
-  if (currentSection === "creatures" && currentSubsection === "beasts") {
-    renderBeasts(list, {
-    container: creaturesContainer,
-    section: currentSection,
-    detailOverlay,
-    detailContent,
-    searchInput,
-    elementFilter,
-    dangerFilter,
-    applyFilters,
-    updateStatusBar
-  });
-    return;
-  }
   renderCardsModule(list, {
     container: creaturesContainer,
     section: currentSection,
@@ -961,7 +922,6 @@ function renderCards(list) {
     updateStatusBar
   });
 }
-
 
 
 // ============================================================
