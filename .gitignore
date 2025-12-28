@@ -30,3 +30,10 @@ build/
 
 # Local helper scripts
 Pull_Nexus.bat
+# Patcher backups
+*.bak_*
+*.bak
+
+# Patcher scripts should not be inside data
+data/**/apply_*patch*.py
+data/**/patch_*.py
